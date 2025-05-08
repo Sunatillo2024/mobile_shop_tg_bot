@@ -1,3 +1,4 @@
+from aiogram.filters import callback_data
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, InputMediaPhoto
 
@@ -67,3 +68,5 @@ async def send_product_detail(bot, chat_id, product):
     except Exception as e:
         print(f"[Error sending product]: {e}")
         await bot.send_message(chat_id=chat_id, text="⚠️ Error sending product details.")
+
+
