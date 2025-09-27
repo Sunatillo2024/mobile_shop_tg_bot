@@ -6,6 +6,7 @@ from app.database.db import Base
 
 class User(Base):
     __tablename__ = "users"
+    user_id = Column(Integer, primary_key=True)
     telegram_id = Column(BigInteger, primary_key=True, index=True)
     full_name = Column(String, index=True)
     phone_number = Column(String, unique=True, index=True, nullable=True)
@@ -17,7 +18,7 @@ class User(Base):
 
 
 class CartItem(Base):
-    __tablename__ = "cartitems"
+    __tablename__ = "cartitems" # noqa
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(BigInteger, ForeignKey("users.telegram_id"))
     product_id = Column(Integer, ForeignKey("products.id"))
@@ -71,7 +72,7 @@ class Order(Base):
 
 
 class OrderItem(Base):
-    __tablename__ = "orderitems"
+    __tablename__ = "orderitems" # noqa
     id = Column(Integer, primary_key=True, index=True)
     order_id = Column(Integer, ForeignKey("orders.id"))
     product_id = Column(Integer, ForeignKey("products.id"))
@@ -80,3 +81,5 @@ class OrderItem(Base):
 
     order = relationship("Order", back_populates="order_items")
     product = relationship("Product")  # Optional: add back_populates if needed
+
+
