@@ -6,8 +6,9 @@ from app.database.db import Base
 
 class User(Base):
     __tablename__ = "users"
-    user_id = Column(Integer, primary_key=True)
-    telegram_id = Column(BigInteger, primary_key=True, index=True)
+
+    user_id = Column(Integer, primary_key=True, autoincrement=True)
+    telegram_id = Column(BigInteger, unique=True, index=True, nullable=False)
     full_name = Column(String, index=True)
     phone_number = Column(String, unique=True, index=True, nullable=True)
     created_at = Column(DateTime, default=func.now())
@@ -15,6 +16,7 @@ class User(Base):
     cart_items = relationship("CartItem", back_populates="user")
     addresses = relationship("Address", back_populates="user")
     orders = relationship("Order", back_populates="user")
+
 
 
 class CartItem(Base):

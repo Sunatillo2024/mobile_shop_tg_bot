@@ -2,7 +2,7 @@ import asyncio
 from aiogram import Bot
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
-from app.config import dp, TOKEN
+from config import dp, TOKEN
 from app.handlers.order import order_router
 from app.handlers.start import start_router
 from app.database.db import init_db

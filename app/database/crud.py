@@ -61,3 +61,23 @@ def get_products_item_from_db(category_id):
         return []
     finally:
         db.close()
+
+async def user_create_or_get(data):
+    db = SessionLocal()
+    try:
+        user = db.query(User).filter_by(telegram_id=data.telegram_id).first()
+        if user:
+            return user
+        else:
+            user = User(**data.dict())
+            db.add(user)        # yangi userni qo‘shish
+            db.commit()         # transactionni saqlash
+            db.refresh(user)    # qayta yuklash (id va boshqa fieldlar uchun)
+            return user
+    except Exception as e:
+        db.rollback()  # xatolik bo‘lsa orqaga qaytar
+        raise e
+    finally:
+        db.close()
+
+
