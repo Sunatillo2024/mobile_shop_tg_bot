@@ -1,66 +1,76 @@
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from app.database.crud import get_category_name_from_db
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
 
 
-async def show_categories():
-    """Display categories as inline keyboard"""
-    categories = get_category_name_from_db()
-
-    if not categories:
-        return InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="❌ No categories available", callback_data="no_categories")]
-        ])
-
-    keyboard = []
-    for category in categories:
-        keyboard.append([InlineKeyboardButton(
-            text=f"📱 {category[1]}",
-            callback_data=f"category_{category[0]}"
-        )])
-
-    keyboard.append([InlineKeyboardButton(text="🔙 Back to Menu", callback_data="back_to_menu")])
-
-    return InlineKeyboardMarkup(inline_keyboard=keyboard)
+async def get_main_menu():
+    """Create main menu reply keyboard"""
+    keyboard = ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text="📱 Products")],
+            [KeyboardButton(text="🛒 My Cart"), KeyboardButton(text="📋 My Orders")],
+            [KeyboardButton(text="📍 My Address"), KeyboardButton(text="ℹ️ Help")]
+        ],
+        resize_keyboard=True,
+        persistent=True
+    )
+    return keyboard
 
 
-def product_detail_keyboard(product_id: int, quantity: int = 1):
-    """Create keyboard for product details with quantity controls"""
+async def send_my_address():
+    """Create keyboard for address sharing"""
     return InlineKeyboardMarkup(inline_keyboard=[
-        [
-            InlineKeyboardButton(text="➖", callback_data=f"decrease_{product_id}"),
-            InlineKeyboardButton(text=str(quantity), callback_data="quantity_display"),
-            InlineKeyboardButton(text="➕", callback_data=f"increase_{product_id}")
-        ],
-        [
-            InlineKeyboardButton(text="🛒 Add to Cart", callback_data=f"addtocart_{product_id}_{quantity}")
-        ],
-        [
-            InlineKeyboardButton(text="🔙 Back to Products", callback_data="back_to_categories")
-        ]
+        [InlineKeyboardButton(text="📍 Send Location", callback_data="send_location")],
+        [InlineKeyboardButton(text="✏️ Type Address Manually", callback_data="type_address")],
+        [InlineKeyboardButton(text="🔙 Back to Menu", callback_data="back_to_menu")]
     ])
 
 
-def cart_keyboard(has_items: bool = True):
-    """Create keyboard for cart management"""
-    keyboard = []
-
-    if has_items:
-        keyboard.extend([
-            [InlineKeyboardButton(text="✅ Proceed to Checkout", callback_data="checkout")],
-            [InlineKeyboardButton(text="🗑️ Clear Cart", callback_data="clear_cart")]
-        ])
-
-    keyboard.append([InlineKeyboardButton(text="🔙 Back to Menu", callback_data="back_to_menu")])
-
-    return InlineKeyboardMarkup(inline_keyboard=keyboard)
-
-
-def cart_item_keyboard(product_id: int):
-    """Create keyboard for individual cart items"""
+def checkout_keyboard():
+    """Create keyboard for checkout process"""
     return InlineKeyboardMarkup(inline_keyboard=[
-        [
-            InlineKeyboardButton(text="➖", callback_data=f"cart_decrease_{product_id}"),
-            InlineKeyboardButton(text="➕", callback_data=f"cart_increase_{product_id}"),
-            InlineKeyboardButton(text="🗑️", callback_data=f"cart_remove_{product_id}")
-        ]
+        [InlineKeyboardButton(text="📍 Set Delivery Address", callback_data="set_address")],
+        [InlineKeyboardButton(text="📞 Add Phone Number", callback_data="add_phone")],
+        [InlineKeyboardButton(text="✅ Place Order", callback_data="place_order")],
+        [InlineKeyboardButton(text="🔙 Back to Cart", callback_data="back_to_cart")]
     ])
+
+
+def address_keyboard():
+    """Create keyboard for address options"""
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="📍 Send Location", callback_data="send_location")],
+        [InlineKeyboardButton(text="✏️ Type Address", callback_data="type_address")],
+        [InlineKeyboardButton(text="🔙 Back", callback_data="back_to_checkout")]
+    ])
+
+
+def order_confirmation_keyboard():
+    """Create keyboard for order confirmation"""
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="✅ Confirm Order", callback_data="confirm_order")],
+        [InlineKeyboardButton(text="❌ Cancel", callback_data="cancel_order")],
+        [InlineKeyboardButton(text="✏️ Edit Order", callback_data="edit_order")]
+    ])
+
+
+def phone_number_keyboard():
+    """Create keyboard for phone number sharing"""
+    return ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text="📞 Share Phone Number", request_contact=True)],
+            [KeyboardButton(text="❌ Cancel")]
+        ],
+        resize_keyboard=True,
+        one_time_keyboard=True
+    )
+
+
+def location_keyboard():
+    """Create keyboard for location sharing"""
+    return ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text="📍 Share Location", request_location=True)],
+            [KeyboardButton(text="❌ Cancel")]
+        ],
+        resize_keyboard=True,
+        one_time_keyboard=True
+    )
