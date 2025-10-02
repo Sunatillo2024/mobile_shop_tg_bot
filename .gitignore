@@ -334,6 +334,10 @@ backup/
 ehthumbs.db
 Thumbs.db
 
+.idea
+.idea/*xml
+
+
 # Application specific
 uploads/
 media/
