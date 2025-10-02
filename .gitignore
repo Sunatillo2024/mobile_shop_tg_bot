@@ -318,6 +318,7 @@ tmp/
 # Backup files
 backup/
 *.backup
+.env
 
 # IDE
 .idea/
